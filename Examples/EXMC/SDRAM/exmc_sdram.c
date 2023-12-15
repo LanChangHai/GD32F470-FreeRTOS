@@ -41,26 +41,26 @@ OF SUCH DAMAGE.
 
 /* Define mode register content */
 /* Burst Length */
-#define SDRAM_MODEREG_BURST_LENGTH_1             ((uint16_t)0x0000)
-#define SDRAM_MODEREG_BURST_LENGTH_2             ((uint16_t)0x0001)
-#define SDRAM_MODEREG_BURST_LENGTH_4             ((uint16_t)0x0002)
-#define SDRAM_MODEREG_BURST_LENGTH_8             ((uint16_t)0x0003)
+#define SDRAM_MODEREG_BURST_LENGTH_1 ((uint16_t)0x0000)
+#define SDRAM_MODEREG_BURST_LENGTH_2 ((uint16_t)0x0001)
+#define SDRAM_MODEREG_BURST_LENGTH_4 ((uint16_t)0x0002)
+#define SDRAM_MODEREG_BURST_LENGTH_8 ((uint16_t)0x0003)
 
 /* Burst Type */
-#define SDRAM_MODEREG_BURST_TYPE_SEQUENTIAL      ((uint16_t)0x0000)
-#define SDRAM_MODEREG_BURST_TYPE_INTERLEAVED     ((uint16_t)0x0008)
+#define SDRAM_MODEREG_BURST_TYPE_SEQUENTIAL ((uint16_t)0x0000)
+#define SDRAM_MODEREG_BURST_TYPE_INTERLEAVED ((uint16_t)0x0008)
 
 /* CAS Latency */
-#define SDRAM_MODEREG_CAS_LATENCY_2              ((uint16_t)0x0020)
-#define SDRAM_MODEREG_CAS_LATENCY_3              ((uint16_t)0x0030)
+#define SDRAM_MODEREG_CAS_LATENCY_2 ((uint16_t)0x0020)
+#define SDRAM_MODEREG_CAS_LATENCY_3 ((uint16_t)0x0030)
 
 /* Write Mode */
 #define SDRAM_MODEREG_WRITEBURST_MODE_PROGRAMMED ((uint16_t)0x0000)
-#define SDRAM_MODEREG_WRITEBURST_MODE_SINGLE     ((uint16_t)0x0200)
+#define SDRAM_MODEREG_WRITEBURST_MODE_SINGLE ((uint16_t)0x0200)
 
-#define SDRAM_MODEREG_OPERATING_MODE_STANDARD    ((uint16_t)0x0000)
+#define SDRAM_MODEREG_OPERATING_MODE_STANDARD ((uint16_t)0x0000)
 
-#define SDRAM_TIMEOUT                            ((uint32_t)0x0000FFFF)
+#define SDRAM_TIMEOUT ((uint32_t)0x0000FFFF)
 
 /*!
     \brief      initialize sdram peripheral
@@ -70,9 +70,9 @@ OF SUCH DAMAGE.
 */
 void exmc_synchronous_dynamic_ram_init(uint32_t sdram_device)
 {
-    exmc_sdram_parameter_struct        sdram_init_struct;
-    exmc_sdram_timing_parameter_struct  sdram_timing_init_struct;
-    exmc_sdram_command_parameter_struct     sdram_command_init_struct;
+    exmc_sdram_parameter_struct sdram_init_struct;
+    exmc_sdram_timing_parameter_struct sdram_timing_init_struct;
+    exmc_sdram_command_parameter_struct sdram_command_init_struct;
 
     uint32_t command_content = 0, bank_select;
     uint32_t timeout = SDRAM_TIMEOUT;
@@ -94,49 +94,52 @@ void exmc_synchronous_dynamic_ram_init(uint32_t sdram_device)
     gpio_output_options_set(GPIOC, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_2 | GPIO_PIN_5);
 
     /* D2(PD0),D3(PD1),D13(PD8),D14(PD9),D15(PD10),D0(PD14),D1(PD15) pin configuration */
-    gpio_af_set(GPIOD, GPIO_AF_12, GPIO_PIN_0  | GPIO_PIN_1  | GPIO_PIN_8 | GPIO_PIN_9 |
-                GPIO_PIN_10 | GPIO_PIN_14 | GPIO_PIN_15);
-    gpio_mode_set(GPIOD, GPIO_MODE_AF, GPIO_PUPD_PULLUP, GPIO_PIN_0  | GPIO_PIN_1  | GPIO_PIN_8 | GPIO_PIN_9 |
-                  GPIO_PIN_10 | GPIO_PIN_14 | GPIO_PIN_15);
-    gpio_output_options_set(GPIOD, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_0  | GPIO_PIN_1  | GPIO_PIN_8 | GPIO_PIN_9 |
-                            GPIO_PIN_10 | GPIO_PIN_14 | GPIO_PIN_15);
+    gpio_af_set(GPIOD, GPIO_AF_12,
+                GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_14 | GPIO_PIN_15);
+    gpio_mode_set(GPIOD, GPIO_MODE_AF, GPIO_PUPD_PULLUP,
+                  GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_14 | GPIO_PIN_15);
+    gpio_output_options_set(GPIOD, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ,
+                            GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_14 |
+                                GPIO_PIN_15);
 
-    /* NBL0(PE0),NBL1(PE1),D4(PE7),D5(PE8),D6(PE9),D7(PE10),D8(PE11),D9(PE12),D10(PE13),D11(PE14),D12(PE15) pin configuration */
-    gpio_af_set(GPIOE, GPIO_AF_12, GPIO_PIN_0  | GPIO_PIN_1  | GPIO_PIN_7  | GPIO_PIN_8 |
-                GPIO_PIN_9  | GPIO_PIN_10 | GPIO_PIN_11 | GPIO_PIN_12 |
-                GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
-    gpio_mode_set(GPIOE, GPIO_MODE_AF, GPIO_PUPD_PULLUP, GPIO_PIN_0  | GPIO_PIN_1  | GPIO_PIN_7  | GPIO_PIN_8 |
-                  GPIO_PIN_9  | GPIO_PIN_10 | GPIO_PIN_11 | GPIO_PIN_12 |
-                  GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
-    gpio_output_options_set(GPIOE, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_0  | GPIO_PIN_1  | GPIO_PIN_7  | GPIO_PIN_8 |
-                            GPIO_PIN_9  | GPIO_PIN_10 | GPIO_PIN_11 | GPIO_PIN_12 |
-                            GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
+    /* NBL0(PE0),NBL1(PE1),D4(PE7),D5(PE8),D6(PE9),D7(PE10),D8(PE11),D9(PE12),D10(PE13),D11(PE14),D12(PE15) pin
+     * configuration */
+    gpio_af_set(GPIOE, GPIO_AF_12,
+                GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_7 | GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_11 |
+                    GPIO_PIN_12 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
+    gpio_mode_set(GPIOE, GPIO_MODE_AF, GPIO_PUPD_PULLUP,
+                  GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_7 | GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_11 |
+                      GPIO_PIN_12 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
+    gpio_output_options_set(GPIOE, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ,
+                            GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_7 | GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_11 |
+                                GPIO_PIN_12 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
 
-    /* A0(PF0),A1(PF1),A2(PF2),A3(PF3),A4(PF4),A5(PF5),NRAS(PF11),A6(PF12),A7(PF13),A8(PF14),A9(PF15) pin configuration */
-    gpio_af_set(GPIOF, GPIO_AF_12, GPIO_PIN_0  | GPIO_PIN_1  | GPIO_PIN_2  | GPIO_PIN_3  |
-                GPIO_PIN_4  | GPIO_PIN_5  | GPIO_PIN_11 | GPIO_PIN_12 |
-                GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
-    gpio_mode_set(GPIOF, GPIO_MODE_AF, GPIO_PUPD_PULLUP, GPIO_PIN_0  | GPIO_PIN_1  | GPIO_PIN_2  | GPIO_PIN_3  |
-                  GPIO_PIN_4  | GPIO_PIN_5  | GPIO_PIN_11 | GPIO_PIN_12 |
-                  GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
-    gpio_output_options_set(GPIOF, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_0  | GPIO_PIN_1  | GPIO_PIN_2  | GPIO_PIN_3  |
-                            GPIO_PIN_4  | GPIO_PIN_5  | GPIO_PIN_11 | GPIO_PIN_12 |
-                            GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
+    /* A0(PF0),A1(PF1),A2(PF2),A3(PF3),A4(PF4),A5(PF5),NRAS(PF11),A6(PF12),A7(PF13),A8(PF14),A9(PF15) pin configuration
+     */
+    gpio_af_set(GPIOF, GPIO_AF_12,
+                GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_11 |
+                    GPIO_PIN_12 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
+    gpio_mode_set(GPIOF, GPIO_MODE_AF, GPIO_PUPD_PULLUP,
+                  GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_11 |
+                      GPIO_PIN_12 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
+    gpio_output_options_set(GPIOF, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ,
+                            GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_11 |
+                                GPIO_PIN_12 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
 
     /* A10(PG0),A11(PG1),A12(PG2),A14(PG4),A15(PG5),SDCLK(PG8),NCAS(PG15) pin configuration */
-    gpio_af_set(GPIOG, GPIO_AF_12, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_4 |
-                GPIO_PIN_5 | GPIO_PIN_8 | GPIO_PIN_15);
-    gpio_mode_set(GPIOG, GPIO_MODE_AF, GPIO_PUPD_PULLUP, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_4 |
-                  GPIO_PIN_5 | GPIO_PIN_8 | GPIO_PIN_15);
-    gpio_output_options_set(GPIOG, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_4 |
-                            GPIO_PIN_5 | GPIO_PIN_8 | GPIO_PIN_15);
+    gpio_af_set(GPIOG, GPIO_AF_12,
+                GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_8 | GPIO_PIN_15);
+    gpio_mode_set(GPIOG, GPIO_MODE_AF, GPIO_PUPD_PULLUP,
+                  GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_8 | GPIO_PIN_15);
+    gpio_output_options_set(GPIOG, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ,
+                            GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_8 | GPIO_PIN_15);
     /* SDNWE(PH5) pin configuration */
     gpio_af_set(GPIOH, GPIO_AF_12, GPIO_PIN_5);
     gpio_mode_set(GPIOH, GPIO_MODE_AF, GPIO_PUPD_PULLUP, GPIO_PIN_5);
     gpio_output_options_set(GPIOH, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_5);
 
     /* specify which SDRAM to read and write */
-    if(EXMC_SDRAM_DEVICE0 == sdram_device) {
+    if (EXMC_SDRAM_DEVICE0 == sdram_device) {
         bank_select = EXMC_SDRAM_DEVICE0_SELECT;
     } else {
         bank_select = EXMC_SDRAM_DEVICE1_SELECT;
@@ -170,7 +173,7 @@ void exmc_synchronous_dynamic_ram_init(uint32_t sdram_device)
     sdram_init_struct.sdclock_config = EXMC_SDCLK_PERIODS_3_HCLK;
     sdram_init_struct.burst_read_switch = ENABLE;
     sdram_init_struct.pipeline_read_delay = EXMC_PIPELINE_DELAY_2_HCLK;
-    sdram_init_struct.timing  = &sdram_timing_init_struct;
+    sdram_init_struct.timing = &sdram_timing_init_struct;
     /* EXMC SDRAM bank initialization */
     exmc_sdram_init(&sdram_init_struct);
 
@@ -180,7 +183,7 @@ void exmc_synchronous_dynamic_ram_init(uint32_t sdram_device)
     sdram_command_init_struct.auto_refresh_number = EXMC_SDRAM_AUTO_REFLESH_2_SDCLK;
     sdram_command_init_struct.mode_register_content = 0;
     /* wait until the SDRAM controller is ready */
-    while((exmc_flag_get(sdram_device, EXMC_SDRAM_FLAG_NREADY) != RESET) && (timeout > 0)) {
+    while ((exmc_flag_get(sdram_device, EXMC_SDRAM_FLAG_NREADY) != RESET) && (timeout > 0)) {
         timeout--;
     }
     /* send the command */
@@ -196,7 +199,7 @@ void exmc_synchronous_dynamic_ram_init(uint32_t sdram_device)
     sdram_command_init_struct.mode_register_content = 0;
     /* wait until the SDRAM controller is ready */
     timeout = SDRAM_TIMEOUT;
-    while((exmc_flag_get(sdram_device, EXMC_SDRAM_FLAG_NREADY) != RESET) && (timeout > 0)) {
+    while ((exmc_flag_get(sdram_device, EXMC_SDRAM_FLAG_NREADY) != RESET) && (timeout > 0)) {
         timeout--;
     }
     /* send the command */
@@ -209,7 +212,7 @@ void exmc_synchronous_dynamic_ram_init(uint32_t sdram_device)
     sdram_command_init_struct.mode_register_content = 0;
     /* wait until the SDRAM controller is ready */
     timeout = SDRAM_TIMEOUT;
-    while((exmc_flag_get(sdram_device, EXMC_SDRAM_FLAG_NREADY) != RESET) && (timeout > 0)) {
+    while ((exmc_flag_get(sdram_device, EXMC_SDRAM_FLAG_NREADY) != RESET) && (timeout > 0)) {
         timeout--;
     }
     /* send the command */
@@ -217,10 +220,8 @@ void exmc_synchronous_dynamic_ram_init(uint32_t sdram_device)
 
     /* step 7 : configure load mode register command-----------------------------*/
     /* program mode register */
-    command_content = (uint32_t)SDRAM_MODEREG_BURST_LENGTH_1        |
-                      SDRAM_MODEREG_BURST_TYPE_SEQUENTIAL   |
-                      SDRAM_MODEREG_CAS_LATENCY_3           |
-                      SDRAM_MODEREG_OPERATING_MODE_STANDARD |
+    command_content = (uint32_t)SDRAM_MODEREG_BURST_LENGTH_1 | SDRAM_MODEREG_BURST_TYPE_SEQUENTIAL |
+                      SDRAM_MODEREG_CAS_LATENCY_3 | SDRAM_MODEREG_OPERATING_MODE_STANDARD |
                       SDRAM_MODEREG_WRITEBURST_MODE_SINGLE;
 
     sdram_command_init_struct.command = EXMC_SDRAM_LOAD_MODE_REGISTER;
@@ -230,7 +231,7 @@ void exmc_synchronous_dynamic_ram_init(uint32_t sdram_device)
 
     /* wait until the SDRAM controller is ready */
     timeout = SDRAM_TIMEOUT;
-    while((exmc_flag_get(sdram_device, EXMC_SDRAM_FLAG_NREADY) != RESET) && (timeout > 0)) {
+    while ((exmc_flag_get(sdram_device, EXMC_SDRAM_FLAG_NREADY) != RESET) && (timeout > 0)) {
         timeout--;
     }
     /* send the command */
@@ -244,7 +245,7 @@ void exmc_synchronous_dynamic_ram_init(uint32_t sdram_device)
 
     /* wait until the SDRAM controller is ready */
     timeout = SDRAM_TIMEOUT;
-    while((exmc_flag_get(sdram_device, EXMC_SDRAM_FLAG_NREADY) != RESET) && (timeout > 0)) {
+    while ((exmc_flag_get(sdram_device, EXMC_SDRAM_FLAG_NREADY) != RESET) && (timeout > 0)) {
         timeout--;
     }
 }
@@ -262,7 +263,7 @@ void fill_buffer(uint8_t *pbuffer, uint16_t buffer_lengh, uint16_t offset)
     uint16_t index = 0;
 
     /* fill the buffer with specified values */
-    for(index = 0; index < buffer_lengh; index++) {
+    for (index = 0; index < buffer_lengh; index++) {
         pbuffer[index] = index + offset;
     }
 }
@@ -281,14 +282,14 @@ void sdram_writebuffer_8(uint32_t sdram_device, uint8_t *pbuffer, uint32_t write
     uint32_t temp_addr;
 
     /* select the base address according to EXMC_Bank */
-    if(sdram_device == EXMC_SDRAM_DEVICE0) {
+    if (sdram_device == EXMC_SDRAM_DEVICE0) {
         temp_addr = SDRAM_DEVICE0_ADDR;
     } else {
         temp_addr = SDRAM_DEVICE1_ADDR;
     }
 
     /* while there is data to write */
-    for(; numbytetowrite != 0; numbytetowrite--) {
+    for (; numbytetowrite != 0; numbytetowrite--) {
         /* transfer data to the memory */
         *(uint8_t *)(temp_addr + writeaddr) = *pbuffer++;
 
@@ -311,14 +312,14 @@ void sdram_readbuffer_8(uint32_t sdram_device, uint8_t *pbuffer, uint32_t readad
     uint32_t temp_addr;
 
     /* select the base address according to EXMC_Bank */
-    if(sdram_device == EXMC_SDRAM_DEVICE0) {
+    if (sdram_device == EXMC_SDRAM_DEVICE0) {
         temp_addr = SDRAM_DEVICE0_ADDR;
     } else {
         temp_addr = SDRAM_DEVICE1_ADDR;
     }
 
     /* while there is data to read */
-    for(; numbytetoread != 0; numbytetoread--) {
+    for (; numbytetoread != 0; numbytetoread--) {
         /* read a byte from the memory */
         *pbuffer++ = *(uint8_t *)(temp_addr + readaddr);
 

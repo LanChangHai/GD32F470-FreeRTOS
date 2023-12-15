@@ -56,7 +56,9 @@ Firmware/GD32F4xx_standard_peripheral/Source/gd32f4xx_wwdgt.c \
 Firmware/CMSIS/GD/GD32F4xx/Source/system_gd32f4xx.c \
 User/gd32f4xx_it.c \
 User/main.c \
-User/systick.c
+User/systick.c \
+User/Drive/src/Usart.c \
+User/Drive/src/SdRam.c
 
 # ASM sources
 ASM_SOURCES = Firmware/CMSIS/GD/GD32F4xx/Source/GCC/startup_gd32f470zetx.s
@@ -116,7 +118,8 @@ C_INCLUDES =  \
 -IFirmware/CMSIS/Include \
 -IFirmware/CMSIS/GD/GD32F4xx/Include/ \
 -IFirmware/CMSIS \
--IUser
+-IUser \
+-IUser/Drive/inc
 
 # compile gcc flags
 ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
