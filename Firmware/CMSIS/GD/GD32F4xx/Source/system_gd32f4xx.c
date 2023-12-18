@@ -51,7 +51,7 @@
 //#define __SYSTEM_CLOCK_168M_PLL_25M_HXTAL       (uint32_t)(168000000)
 //#define __SYSTEM_CLOCK_200M_PLL_IRC16M          (uint32_t)(200000000)
 //#define __SYSTEM_CLOCK_200M_PLL_8M_HXTAL        (uint32_t)(200000000)
-#if defined (GD32450) || defined (GD32405) || defined (GD32F407) || defined (GD32F425) || defined (GD32F427)
+#if defined (GD32F450) || defined (GD32F405) || defined (GD32F407) || defined (GD32F425) || defined (GD32F427)
 #define __SYSTEM_CLOCK_200M_PLL_25M_HXTAL         (uint32_t)(200000000)
 #endif
 #if defined (GD32F470)
