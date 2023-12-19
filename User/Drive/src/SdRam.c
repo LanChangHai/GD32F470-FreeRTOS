@@ -35,6 +35,8 @@ static void SDRamGPIOInit()
 
 static void SDRAMInit_W9825G6KH()
 {
+    uint32_t timeout = SDRAM_TIMEOUT;
+    uint32_t command_content = 0;
     exmc_sdram_parameter_struct SDRAM_Init_Struct;
     exmc_sdram_timing_parameter_struct SDRAM_Timing_Init_Struct;
     exmc_sdram_command_parameter_struct SDRAM_Command_Init_Struct;
@@ -57,7 +59,7 @@ static void SDRAMInit_W9825G6KH()
 
     /* 第 2 步：配置 SDRAM 控制寄存器 ---------------------------------*/
     //bank0
-    SDRAM_Init_Struct.sdram_device = EXMC_SDRAM_DEVICE0_SELECT;
+    SDRAM_Init_Struct.sdram_device = EXMC_SDRAM_DEVICE0;
     //CAW:9
     SDRAM_Init_Struct.column_address_width = EXMC_SDRAM_COW_ADDRESS_9;
     //RAW:13
@@ -80,14 +82,14 @@ static void SDRAMInit_W9825G6KH()
 
     /* step 3 : configure CKE high 命令---------------------------------------*/
     SDRAM_Command_Init_Struct.command = EXMC_SDRAM_CLOCK_ENABLE;
-    SDRAM_Command_Init_Struct.bank_select = bank_select;
+    SDRAM_Command_Init_Struct.bank_select = EXMC_SDRAM_DEVICE0_SELECT;
     SDRAM_Command_Init_Struct.auto_refresh_number = EXMC_SDRAM_AUTO_REFLESH_2_SDCLK;
     SDRAM_Command_Init_Struct.mode_register_content = 0;
-    /* wait until the SDRAM controller is ready */
-    while ((exmc_flag_get(EXMC_SDRAM_DEVICE0_SELECT, EXMC_SDRAM_FLAG_NREADY) != RESET) && (timeout > 0)) {
+    /* 等待 SDRAM 控制器准备就绪 */
+    while ((exmc_flag_get(EXMC_SDRAM_DEVICE0, EXMC_SDRAM_FLAG_NREADY) != RESET) && (timeout > 0)) {
         timeout--;
     }
-    /* send the command */
+    /* 发送命令 */
     exmc_sdram_command_config(&SDRAM_Command_Init_Struct);
 
     /* step 4 : insert 10ms delay----------------------------------------------*/
@@ -95,12 +97,12 @@ static void SDRAMInit_W9825G6KH()
 
     /* step 5 : configure precharge all command----------------------------------*/
     SDRAM_Command_Init_Struct.command = EXMC_SDRAM_PRECHARGE_ALL;
-    SDRAM_Command_Init_Struct.bank_select = bank_select;
+    SDRAM_Command_Init_Struct.bank_select = EXMC_SDRAM_DEVICE0_SELECT;
     SDRAM_Command_Init_Struct.auto_refresh_number = EXMC_SDRAM_AUTO_REFLESH_2_SDCLK;
     SDRAM_Command_Init_Struct.mode_register_content = 0;
     /* wait until the SDRAM controller is ready */
     timeout = SDRAM_TIMEOUT;
-    while ((exmc_flag_get(EXMC_SDRAM_DEVICE0_SELECT, EXMC_SDRAM_FLAG_NREADY) != RESET) && (timeout > 0)) {
+    while ((exmc_flag_get(EXMC_SDRAM_DEVICE0, EXMC_SDRAM_FLAG_NREADY) != RESET) && (timeout > 0)) {
         timeout--;
     }
     /* send the command */
@@ -108,12 +110,12 @@ static void SDRAMInit_W9825G6KH()
 
     /* step 6 : configure Auto-Refresh command-----------------------------------*/
     SDRAM_Command_Init_Struct.command = EXMC_SDRAM_AUTO_REFRESH;
-    SDRAM_Command_Init_Struct.bank_select = bank_select;
+    SDRAM_Command_Init_Struct.bank_select = EXMC_SDRAM_DEVICE0_SELECT;
     SDRAM_Command_Init_Struct.auto_refresh_number = EXMC_SDRAM_AUTO_REFLESH_9_SDCLK;
     SDRAM_Command_Init_Struct.mode_register_content = 0;
     /* wait until the SDRAM controller is ready */
     timeout = SDRAM_TIMEOUT;
-    while ((exmc_flag_get(EXMC_SDRAM_DEVICE0_SELECT, EXMC_SDRAM_FLAG_NREADY) != RESET) && (timeout > 0)) {
+    while ((exmc_flag_get(EXMC_SDRAM_DEVICE0, EXMC_SDRAM_FLAG_NREADY) != RESET) && (timeout > 0)) {
         timeout--;
     }
     /* send the command */
@@ -126,36 +128,113 @@ static void SDRAMInit_W9825G6KH()
                       SDRAM_MODEREG_WRITEBURST_MODE_SINGLE;
 
     SDRAM_Command_Init_Struct.command = EXMC_SDRAM_LOAD_MODE_REGISTER;
-    SDRAM_Command_Init_Struct.bank_select = bank_select;
+    SDRAM_Command_Init_Struct.bank_select = EXMC_SDRAM_DEVICE0_SELECT;
     SDRAM_Command_Init_Struct.auto_refresh_number = EXMC_SDRAM_AUTO_REFLESH_2_SDCLK;
     SDRAM_Command_Init_Struct.mode_register_content = command_content;
 
     /* wait until the SDRAM controller is ready */
     timeout = SDRAM_TIMEOUT;
-    while ((exmc_flag_get(sdram_device, EXMC_SDRAM_FLAG_NREADY) != RESET) && (timeout > 0)) {
+    while ((exmc_flag_get(EXMC_SDRAM_DEVICE0, EXMC_SDRAM_FLAG_NREADY) != RESET) && (timeout > 0)) {
         timeout--;
     }
     /* send the command */
     exmc_sdram_command_config(&SDRAM_Command_Init_Struct);
 
-    /* step 8 : set the auto-refresh rate counter--------------------------------*/
+    /* step 8 : 设置自动刷新率计数器--------------------------------*/
     /* 64ms, 8192-cycle refresh, 64ms/8192=7.81us */
     /* SDCLK_Freq = SYS_Freq/2 */
     /* (7.81 us * SDCLK_Freq) - 20 */
-    exmc_sdram_refresh_count_set(761);
+    exmc_sdram_refresh_count_set(918);
 
     /* wait until the SDRAM controller is ready */
     timeout = SDRAM_TIMEOUT;
-    while ((exmc_flag_get(sdram_device, EXMC_SDRAM_FLAG_NREADY) != RESET) && (timeout > 0)) {
+    while ((exmc_flag_get(EXMC_SDRAM_DEVICE0, EXMC_SDRAM_FLAG_NREADY) != RESET) && (timeout > 0)) {
         timeout--;
     }
 }
 
 void SDRamInit()
 {
+    rcu_periph_clock_enable(RCU_EXMC);
     SDRamGPIOInit();
     SDRAMInit_W9825G6KH();
 }
 
+/*!
+    \brief      fill the buffer with specified value
+    \param[in]  pbuffer: pointer on the buffer to fill
+    \param[in]  buffersize: size of the buffer to fill
+    \param[in]  value: value to fill on the buffer
+    \param[out] none
+    \retval     none
+*/
+void fill_buffer(uint8_t *pbuffer, uint16_t buffer_lengh, uint16_t offset)
+{
+    uint16_t index = 0;
 
+    /* fill the buffer with specified values */
+    for (index = 0; index < buffer_lengh; index++) {
+        pbuffer[index] = index + offset;
+    }
+}
+
+/*!
+    \brief      write a byte buffer(data is 8 bits) to the EXMC SDRAM memory
+    \param[in]  sdram_device: specify which a SDRAM memory block is written
+    \param[in]  pbuffer: pointer to buffer
+    \param[in]  writeaddr: SDRAM memory internal address from which the data will be written
+    \param[in]  numbytetowrite: number of bytes to write
+    \param[out] none
+    \retval     none
+*/
+void sdram_writebuffer_8(uint32_t sdram_device, uint8_t *pbuffer, uint32_t writeaddr, uint32_t numbytetowrite)
+{
+    uint32_t temp_addr;
+
+    /* select the base address according to EXMC_Bank */
+    if (sdram_device == EXMC_SDRAM_DEVICE0) {
+        temp_addr = SDRAM_DEVICE0_ADDR;
+    } else {
+        temp_addr = SDRAM_DEVICE1_ADDR;
+    }
+
+    /* while there is data to write */
+    for (; numbytetowrite != 0; numbytetowrite--) {
+        /* transfer data to the memory */
+        *(uint8_t *)(temp_addr + writeaddr) = *pbuffer++;
+
+        /* increment the address */
+        writeaddr += 1;
+    }
+}
+
+/*!
+    \brief      read a block of 8-bit data from the EXMC SDRAM memory
+    \param[in]  sdram_device: specify which a SDRAM memory block is written
+    \param[in]  pbuffer: pointer to buffer
+    \param[in]  readaddr: SDRAM memory internal address to read from
+    \param[in]  numbytetoread: number of bytes to read
+    \param[out] none
+    \retval     none
+*/
+void sdram_readbuffer_8(uint32_t sdram_device, uint8_t *pbuffer, uint32_t readaddr, uint32_t numbytetoread)
+{
+    uint32_t temp_addr;
+
+    /* select the base address according to EXMC_Bank */
+    if (sdram_device == EXMC_SDRAM_DEVICE0) {
+        temp_addr = SDRAM_DEVICE0_ADDR;
+    } else {
+        temp_addr = SDRAM_DEVICE1_ADDR;
+    }
+
+    /* while there is data to read */
+    for (; numbytetoread != 0; numbytetoread--) {
+        /* read a byte from the memory */
+        *pbuffer++ = *(uint8_t *)(temp_addr + readaddr);
+
+        /* increment the address */
+        readaddr += 1;
+    }
+}
 
