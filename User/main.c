@@ -28,19 +28,19 @@ int main(void)
     UsartInit(Debug);
     setvbuf(stdout, NULL, _IONBF, 0);
 
- /*   printf("\r\nSDRAM initialized!");
+   printf("\r\nSDRAM initialized!");
     delay_1ms(1000);
 
-    *//* fill txbuffer *//*
+    //* fill txbuffer *//*
     fill_buffer(txbuffer, BUFFER_SIZE, 0x0000);
 
-    *//* write data to SDRAM *//*
+    //* write data to SDRAM *//*
     sdram_writebuffer_8(EXMC_SDRAM_DEVICE0, txbuffer, WRITE_READ_ADDR, BUFFER_SIZE);
 
     printf("\r\nSDRAM write data completed!");
     delay_1ms(1000);
 
-    *//* read data from SDRAM *//*
+    //* read data from SDRAM *//*
     sdram_readbuffer_8(EXMC_SDRAM_DEVICE0, rxbuffer, WRITE_READ_ADDR, BUFFER_SIZE);
 
     printf("\r\nSDRAM read data completed!");
@@ -49,7 +49,7 @@ int main(void)
     printf("\r\nCheck the data!");
     delay_1ms(1000);
 
-    *//* compare two buffers *//*
+    //* compare two buffers *//*
     for(int i = 0; i < BUFFER_SIZE; i++) {
         if(rxbuffer[i] != txbuffer[i]) {
             writereadstatus ++;
@@ -60,7 +60,7 @@ int main(void)
     if(writereadstatus) {
         printf("\r\nSDRAM test failed!");
 
-        *//* failure, light on LED3 *//*
+        //* failure, light on LED3 *//*
     } else {
         printf("\r\nSDRAM test successed!");
         delay_1ms(1000);
@@ -72,11 +72,8 @@ int main(void)
                 printf("\r\n");
             }
         }
-        *//* success, light on LED1 *//*
-    }*/
-    char *p = (char *)0xC0000000;
-    *p=0x01;
-    printf("%d",*p);
+        //* success, light on LED1 *//*
+    }
 
     while (1);
 }

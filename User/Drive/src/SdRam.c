@@ -47,15 +47,15 @@ static void SDRAMInit_W9825G6KH()
     /* XSRD: min = 72ns */
     SDRAM_Timing_Init_Struct.exit_selfrefresh_delay = 9;
     /* RASD: min=42ns , max=100k (ns) */
-    SDRAM_Timing_Init_Struct.row_address_select_delay = 6;
+    SDRAM_Timing_Init_Struct.row_address_select_delay = 5;
     /* ARFD: min=60ns *///Trc
     SDRAM_Timing_Init_Struct.auto_refresh_delay = 8;
     /* WRD: 2tck */
-    SDRAM_Timing_Init_Struct.write_recovery_delay = 2;
+    SDRAM_Timing_Init_Struct.write_recovery_delay = 3;
     /* RPD:  min=15ns */
-    SDRAM_Timing_Init_Struct.row_precharge_delay = 2;
+    SDRAM_Timing_Init_Struct.row_precharge_delay = 3;
     /* RCD:  min=15ns */
-    SDRAM_Timing_Init_Struct.row_to_column_delay = 2;
+    SDRAM_Timing_Init_Struct.row_to_column_delay = 3;
 
     /* 第 2 步：配置 SDRAM 控制寄存器 ---------------------------------*/
     //bank0
@@ -75,7 +75,7 @@ static void SDRAMInit_W9825G6KH()
 
     SDRAM_Init_Struct.sdclock_config = EXMC_SDCLK_PERIODS_2_HCLK;
     SDRAM_Init_Struct.burst_read_switch = ENABLE;
-    SDRAM_Init_Struct.pipeline_read_delay = EXMC_PIPELINE_DELAY_1_HCLK;
+    SDRAM_Init_Struct.pipeline_read_delay = EXMC_PIPELINE_DELAY_2_HCLK;
     SDRAM_Init_Struct.timing = &SDRAM_Timing_Init_Struct;
     /* EXMC SDRAM bank 初始化 */
     exmc_sdram_init(&SDRAM_Init_Struct);
@@ -125,7 +125,7 @@ static void SDRAMInit_W9825G6KH()
     /* program mode register */
     command_content = (uint32_t)SDRAM_MODEREG_BURST_LENGTH_1 | SDRAM_MODEREG_BURST_TYPE_SEQUENTIAL |
                       SDRAM_MODEREG_CAS_LATENCY_3 | SDRAM_MODEREG_OPERATING_MODE_STANDARD |
-                      SDRAM_MODEREG_WRITEBURST_MODE_SINGLE;
+                      SDRAM_MODEREG_WRITEBURST_MODE_SINGLE ;
 
     SDRAM_Command_Init_Struct.command = EXMC_SDRAM_LOAD_MODE_REGISTER;
     SDRAM_Command_Init_Struct.bank_select = EXMC_SDRAM_DEVICE0_SELECT;
@@ -144,7 +144,7 @@ static void SDRAMInit_W9825G6KH()
     /* 64ms, 8192-cycle refresh, 64ms/8192=7.81us */
     /* SDCLK_Freq = SYS_Freq/2 */
     /* (7.81 us * SDCLK_Freq) - 20 */
-    exmc_sdram_refresh_count_set(918);
+    exmc_sdram_refresh_count_set(900);
 
     /* wait until the SDRAM controller is ready */
     timeout = SDRAM_TIMEOUT;
