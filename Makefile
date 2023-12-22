@@ -67,7 +67,7 @@ Firmware/FreeRTOS/stream_buffer.c \
 Firmware/FreeRTOS/tasks.c \
 Firmware/FreeRTOS/timers.c \
 Firmware/FreeRTOS/portable/GCC/ARM_CM4F/port.c \
-Firmware/FreeRTOS/portable/MemMang/heap_4.c
+Firmware/FreeRTOS/portable/MemMang/heap_5.c
 #Firmware/Fatfs/source/ff.c \
 #Firmware/Fatfs/source/ffsystem.c \
 #Firmware/Fatfs/source/diskio.c \
@@ -129,7 +129,7 @@ AS_INCLUDES =
 C_INCLUDES =  \
 -IFirmware/GD32F4xx_standard_peripheral/Include \
 -IFirmware/CMSIS/Include \
--IFirmware/CMSIS/GD/GD32F4xx/Include/ \
+-IFirmware/CMSIS/GD/GD32F4xx/Include \
 -IFirmware/CMSIS \
 -IUser \
 -IUser/Drive/inc \

@@ -4,6 +4,11 @@
 
 #include "SdRam.h"
 
+#define RAM_HEAP_SIZE ( 75 * 1024 )
+static unsigned char ucHeap[ RAM_HEAP_SIZE ];
+#define SDRAM_START_ADDRESS ( ( uint8_t * ) 0xC0000000 )
+#define SDRAM_SIZE ( 32 * 1024 * 1024 )                  //外置SDRAM
+
 static void SDRamGPIOInit()
 {
     rcu_periph_clock_enable(RCU_GPIOC);
@@ -160,6 +165,14 @@ void SDRamInit()
     rcu_periph_clock_enable(RCU_EXMC);
     SDRamGPIOInit();
     SDRAMInit_W9825G6KH();
+    /*接下来的初始化操作可让FreeeRTOS从SDRAM获取堆*/
+    const HeapRegion_t xHeapRegions[] =
+    {
+        { ucHeap, RAM_HEAP_SIZE },
+        { SDRAM_START_ADDRESS, SDRAM_SIZE },
+        { NULL, 0 } /* Marks the end of the array. */
+    };
+    vPortDefineHeapRegions( xHeapRegions);
 }
 
 /*!

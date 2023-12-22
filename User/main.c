@@ -1,10 +1,8 @@
 #include "gd32f4xx.h"
 #include "Usart.h"
 #include <stdio.h>
-#include "SdRam.h"
 #include "FreeRTOS.h"
 #include "task.h"
-
 
 TaskHandle_t StartTask_Handler;
 
@@ -71,10 +69,10 @@ void task_led2(void *pvParameters)
 {
     while(1)
     {
-        gpio_bit_write(GPIOD, GPIO_PIN_7, SET);
-        vTaskDelay(300);
-        gpio_bit_write(GPIOD, GPIO_PIN_7, RESET);
-        vTaskDelay(300);
+        char *p =(char *)pvPortMalloc(1000*1024*sizeof(char));
+        printf("0x%X",p);
+        vPortFree(p);
+        vTaskDelay(1000);
     }
 }
 

@@ -6,7 +6,7 @@
 #define GD32F470_FREERTOS_SDRAM_H
 
 #include "gd32f4xx_exmc.h"
-
+#include "FreeRTOS.h"
 
 /* Define mode register content */
 /* Burst Length */
@@ -33,8 +33,6 @@
 
 #define SDRAM_DEVICE0_ADDR                         ((uint32_t)0xC0000000)
 #define SDRAM_DEVICE1_ADDR                         ((uint32_t)0xD0000000)
-
-
 
 void SDRamInit();
 void fill_buffer(uint8_t *pbuffer, uint16_t buffer_lengh, uint16_t offset);
