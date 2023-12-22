@@ -54,16 +54,24 @@ Firmware/GD32F4xx_standard_peripheral/Source/gd32f4xx_trng.c \
 Firmware/GD32F4xx_standard_peripheral/Source/gd32f4xx_usart.c \
 Firmware/GD32F4xx_standard_peripheral/Source/gd32f4xx_wwdgt.c \
 Firmware/CMSIS/GD/GD32F4xx/Source/system_gd32f4xx.c \
-Firmware/Fatfs/source/ff.c \
-Firmware/Fatfs/source/ffsystem.c \
-Firmware/Fatfs/source/diskio.c \
-Firmware/Fatfs/source/ffunicode.c \
 User/gd32f4xx_it.c \
 User/main.c \
-User/systick.c \
 User/Drive/src/Usart.c \
 User/Drive/src/SdRam.c \
-User/Drive/src/sdcard.c
+User/Drive/src/sdcard.c \
+Firmware/FreeRTOS/croutine.c \
+Firmware/FreeRTOS/event_groups.c \
+Firmware/FreeRTOS/list.c \
+Firmware/FreeRTOS/queue.c \
+Firmware/FreeRTOS/stream_buffer.c \
+Firmware/FreeRTOS/tasks.c \
+Firmware/FreeRTOS/timers.c \
+Firmware/FreeRTOS/portable/GCC/ARM_CM4F/port.c \
+Firmware/FreeRTOS/portable/MemMang/heap_4.c
+#Firmware/Fatfs/source/ff.c \
+#Firmware/Fatfs/source/ffsystem.c \
+#Firmware/Fatfs/source/diskio.c \
+#Firmware/Fatfs/source/ffunicode.c \
 
 # ASM sources
 ASM_SOURCES = Firmware/CMSIS/GD/GD32F4xx/Source/GCC/startup_gd32f470zetx.s
@@ -96,10 +104,10 @@ BIN = $(CP) -O binary -S
 CPU = -mcpu=cortex-m4
 
 # fpu
-# NONE for Cortex-M0/M0+/M3
+FPU = -mfpu=fpv4-sp-d16
 
 # float-abi
-
+FLOAT-ABI = -mfloat-abi=hard
 
 # mcu
 MCU = $(CPU) -mthumb $(FPU) $(FLOAT-ABI)
@@ -125,7 +133,9 @@ C_INCLUDES =  \
 -IFirmware/CMSIS \
 -IUser \
 -IUser/Drive/inc \
--IFirmware/Fatfs/source
+-IFirmware/FreeRTOS/include \
+-IFirmware/FreeRTOS/portable/GCC/ARM_CM4F
+#-IFirmware/Fatfs/source
 
 # compile gcc flags
 ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections

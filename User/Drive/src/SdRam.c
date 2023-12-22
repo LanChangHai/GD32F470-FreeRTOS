@@ -93,7 +93,9 @@ static void SDRAMInit_W9825G6KH()
     exmc_sdram_command_config(&SDRAM_Command_Init_Struct);
 
     /* step 4 : insert 10ms delay----------------------------------------------*/
-    delay_1ms(10);
+    for(uint32_t i=9999;i>0;i--)
+        for(uint32_t j=9999;j>0;j--);
+    //delay_1ms(10);
 
     /* step 5 : configure precharge all command----------------------------------*/
     SDRAM_Command_Init_Struct.command = EXMC_SDRAM_PRECHARGE_ALL;

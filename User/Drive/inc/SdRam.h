@@ -6,7 +6,7 @@
 #define GD32F470_FREERTOS_SDRAM_H
 
 #include "gd32f4xx_exmc.h"
-#include "systick.h"
+
 
 /* Define mode register content */
 /* Burst Length */
