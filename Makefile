@@ -54,11 +54,16 @@ Firmware/GD32F4xx_standard_peripheral/Source/gd32f4xx_trng.c \
 Firmware/GD32F4xx_standard_peripheral/Source/gd32f4xx_usart.c \
 Firmware/GD32F4xx_standard_peripheral/Source/gd32f4xx_wwdgt.c \
 Firmware/CMSIS/GD/GD32F4xx/Source/system_gd32f4xx.c \
+Firmware/Fatfs/source/ff.c \
+Firmware/Fatfs/source/ffsystem.c \
+Firmware/Fatfs/source/diskio.c \
+Firmware/Fatfs/source/ffunicode.c \
 User/gd32f4xx_it.c \
 User/main.c \
 User/systick.c \
 User/Drive/src/Usart.c \
-User/Drive/src/SdRam.c
+User/Drive/src/SdRam.c \
+User/Drive/src/sdcard.c
 
 # ASM sources
 ASM_SOURCES = Firmware/CMSIS/GD/GD32F4xx/Source/GCC/startup_gd32f470zetx.s
@@ -119,12 +124,13 @@ C_INCLUDES =  \
 -IFirmware/CMSIS/GD/GD32F4xx/Include/ \
 -IFirmware/CMSIS \
 -IUser \
--IUser/Drive/inc
+-IUser/Drive/inc \
+-IFirmware/Fatfs/source
 
 # compile gcc flags
 ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
 
-CFLAGS = $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
+CFLAGS = $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections -std=c99
 
 ifeq ($(DEBUG), 1)
 CFLAGS += -g -gdwarf-2

@@ -34,6 +34,7 @@ OF SUCH DAMAGE.
 
 #include "gd32f4xx.h"
 #include "systick.h"
+#include "SdRam.h"
 
 volatile static uint32_t delay;
 
@@ -53,6 +54,7 @@ void systick_config(void)
     }
     /* configure the systick handler priority */
     NVIC_SetPriority(SysTick_IRQn, 0x00U);
+    SDRamInit();
 }
 
 /*!
