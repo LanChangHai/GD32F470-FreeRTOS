@@ -83,7 +83,9 @@ int main(void)
 
     if(i) {
         printf("\r\n Card init success!\r\n");
-    } else {
+    }
+    else
+    {
         printf("\r\n Card init failed!\r\n");
         /* turn on LED1, LED3 and turn off LED2 */
         gd_eval_led_on(LED1);
@@ -268,10 +270,10 @@ void nvic_config(void)
 }
 
 /*!
-    \brief      initialize the card, get the card information, set the bus mode and transfer mode
-    \param[in]  none
-    \param[out] none
-    \retval     sd_error_enum
+    \brief 初始化卡，获取卡信息，设置总线模式和传输模式
+    \param[in] 无
+    \param[out] 无
+    \retval sd_error_enum
 */
 sd_error_enum sd_io_init(void)
 {

@@ -207,50 +207,50 @@ typedef enum {
 
 extern uint32_t sd_scr[2];                /* SD card SCR */
 
-/* function declarations */
-/* initialize the SD card and make it in standby state */
+/* 函数声明 */
+/* 初始化SD卡，使其处于待机状态 */
 sd_error_enum sd_init(void);
-/* initialize the card and get CID and CSD of the card */
+/* 初始化卡并获取卡的 CID 和 CSD */
 sd_error_enum sd_card_init(void);
-/* configure the clock and the work voltage, and get the card type */
+/* 配置时钟和工作电压，获取卡类型 */
 sd_error_enum sd_power_on(void);
-/* close the power of SDIO */
+/* 关闭SDIO的电源 */
 sd_error_enum sd_power_off(void);
 
-/* configure the bus mode */
+/* 配置总线模式 */
 sd_error_enum sd_bus_mode_config(uint32_t busmode);
-/* configure the mode of transmission */
+/* 配置传输方式 */
 sd_error_enum sd_transfer_mode_config(uint32_t txmode);
 
-/* read a block data into a buffer from the specified address of a card */
+/* 将区块数据从卡的指定地址读入缓冲区 */
 sd_error_enum sd_block_read(uint32_t *preadbuffer, uint32_t readaddr, uint16_t blocksize);
-/* read multiple blocks data into a buffer from the specified address of a card */
+/* 将多个块数据从卡的指定地址读入缓冲区 */
 sd_error_enum sd_multiblocks_read(uint32_t *preadbuffer, uint32_t readaddr, uint16_t blocksize, uint32_t blocksnumber);
-/* write a block data to the specified address of a card */
+/* 将区块数据写入卡的指定地址 */
 sd_error_enum sd_block_write(uint32_t *pwritebuffer, uint32_t writeaddr, uint16_t blocksize);
-/* write multiple blocks data to the specified address of a card */
+/* 将多个区块数据写入卡的指定地址 */
 sd_error_enum sd_multiblocks_write(uint32_t *pwritebuffer, uint32_t writeaddr, uint16_t blocksize, uint32_t blocksnumber);
-/* erase a continuous area of a card */
+/* 擦除卡片的连续区域 */
 sd_error_enum sd_erase(uint32_t startaddr, uint32_t endaddr);
-/* process all the interrupts which the corresponding flags are set */
+/* 处理设置了相应标志的所有中断 */
 sd_error_enum sd_interrupts_process(void);
 
-/* select or deselect a card */
+/* 选择或取消选择卡片 */
 sd_error_enum sd_card_select_deselect(uint16_t cardrca);
-/* get the card status whose response format R1 contains a 32-bit field */
+/* 获取响应格式 R1 包含 32 位字段的卡状态 */
 sd_error_enum sd_cardstatus_get(uint32_t *pcardstatus);
-/* get the SD status, the size of the SD status is one data block of 512 bit */
+/* 获取 SD 状态，SD 状态的大小为 1 个 512 位的数据块 */
 sd_error_enum sd_sdstatus_get(uint32_t *psdstatus);
-/* stop an ongoing data transfer */
+/* 停止正在进行的数据传输 */
 sd_error_enum sd_transfer_stop(void);
-/* lock or unlock a card */
+/* 锁定或解锁卡 */
 sd_error_enum sd_lock_unlock(uint8_t lockstate);
 
-/* get the data transfer state */
+/* 获取数据传输状态 */
 sd_transfer_state_enum sd_transfer_state_get(void);
-/* get SD card capacity(KB) */
+/* 获取SD卡容量（KB） */
 uint32_t sd_card_capacity_get(void);
-/* get the detailed information of the SD card based on received CID and CSD */
+/* 根据收到的 CID 和 CSD 获取 SD 卡的详细信息 */
 sd_error_enum sd_card_information_get(sd_card_info_struct *pcardinfo);
 
 #endif /* SDCARD_H */

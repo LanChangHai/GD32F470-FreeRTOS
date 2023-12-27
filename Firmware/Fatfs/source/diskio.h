@@ -9,6 +9,8 @@
 extern "C" {
 #endif
 
+#include "drive.h"
+
 /* Status of Disk Functions */
 typedef BYTE	DSTATUS;
 

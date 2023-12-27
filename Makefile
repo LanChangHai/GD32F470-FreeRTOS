@@ -67,11 +67,12 @@ Firmware/FreeRTOS/stream_buffer.c \
 Firmware/FreeRTOS/tasks.c \
 Firmware/FreeRTOS/timers.c \
 Firmware/FreeRTOS/portable/GCC/ARM_CM4F/port.c \
-Firmware/FreeRTOS/portable/MemMang/heap_5.c
-#Firmware/Fatfs/source/ff.c \
-#Firmware/Fatfs/source/ffsystem.c \
-#Firmware/Fatfs/source/diskio.c \
-#Firmware/Fatfs/source/ffunicode.c \
+Firmware/FreeRTOS/portable/MemMang/heap_5.c \
+Firmware/Fatfs/source/ff.c \
+Firmware/Fatfs/source/ffsystem.c \
+Firmware/Fatfs/source/diskio.c \
+Firmware/Fatfs/source/ffunicode.c \
+Firmware/Fatfs/source/drive.c
 
 # ASM sources
 ASM_SOURCES = Firmware/CMSIS/GD/GD32F4xx/Source/GCC/startup_gd32f470zetx.s
@@ -134,8 +135,8 @@ C_INCLUDES =  \
 -IUser \
 -IUser/Drive/inc \
 -IFirmware/FreeRTOS/include \
--IFirmware/FreeRTOS/portable/GCC/ARM_CM4F
-#-IFirmware/Fatfs/source
+-IFirmware/FreeRTOS/portable/GCC/ARM_CM4F \
+-IFirmware/Fatfs/source
 
 # compile gcc flags
 ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections

@@ -122,11 +122,11 @@ static uint32_t totalnumber_bytes = 0, stopcondition = 0;
 static __IO sd_error_enum transerror = SD_OK;
 static __IO uint32_t transend = 0, number_bytes = 0;
 
-/* check if the command sent error occurs */
+/* 检查是否出现命令发送错误 */
 static sd_error_enum cmdsent_error_check(void);
-/* check if error occurs for R1 response */
+/* 检查 R1 响应是否发生错误 */
 static sd_error_enum r1_error_check(uint8_t cmdindex);
-/* check if error type for R1 response */
+/* 检查 R1 响应的错误类型 */
 static sd_error_enum r1_error_type_check(uint32_t resp);
 /* check if error occurs for R2 response */
 static sd_error_enum r2_error_check(void);
@@ -137,29 +137,29 @@ static sd_error_enum r6_error_check(uint8_t cmdindex, uint16_t *prca);
 /* check if error occurs for R7 response */
 static sd_error_enum r7_error_check(void);
 
-/* get the state which the card is in */
+/* 获取卡所处的状态 */
 static sd_error_enum sd_card_state_get(uint8_t *pcardstate);
-/* configure the bus width mode */
+/* 配置总线宽度模式 */
 static sd_error_enum sd_bus_width_config(uint32_t buswidth);
 /* get the SCR of corresponding card */
 static sd_error_enum sd_scr_get(uint16_t rca, uint32_t *pscr);
-/* get the data block size */
+/* 获取数据块大小 */
 static uint32_t sd_datablocksize_get(uint16_t bytesnumber);
 
-/* configure the GPIO of SDIO interface */
+/* 配置SDIO接口的GPIO */
 static void gpio_config(void);
-/* configure the RCU of SDIO and DMA */
+/* 配置 SDIO 和 DMA 的 RCU */
 static void rcu_config(void);
-/* configure the DMA for SDIO transfer request */
+/* 为 SDIO 传输请求配置 DMA */
 static void dma_transfer_config(uint32_t *srcbuf, uint32_t bufsize);
-/* configure the DMA for SDIO reveive request */
+/* 为 SDIO reveive 请求配置 DMA */
 static void dma_receive_config(uint32_t *dstbuf, uint32_t bufsize);
 
 /*!
-    \brief      initialize the SD card and make it in standby state
-    \param[in]  none
-    \param[out] none
-    \retval     sd_error_enum
+    \brief 初始化 SD 卡并使其处于待机状态
+    \param[in] 无
+    \param[out] 无
+    \retval sd_error_enum
 */
 sd_error_enum sd_init(void)
 {
@@ -190,10 +190,10 @@ sd_error_enum sd_init(void)
 }
 
 /*!
-    \brief      initialize the card and get CID and CSD of the card
-    \param[in]  none
-    \param[out] none
-    \retval     sd_error_enum
+    \brief 初始化卡并获取卡的 CID 和 CSD
+    \param[in] 无
+    \param[out] 无
+    \retval sd_error_enum
 */
 sd_error_enum sd_card_init(void)
 {
@@ -262,10 +262,10 @@ sd_error_enum sd_card_init(void)
 }
 
 /*!
-    \brief      configure the clock and the work voltage, and get the card type
-    \param[in]  none
-    \param[out] none
-    \retval     sd_error_enum
+    \brief 配置时钟和工作电压，并获取卡类型
+    \param[in] 无
+    \param[out] 无
+    \retval sd_error_enum
 */
 sd_error_enum sd_power_on(void)
 {
@@ -362,13 +362,13 @@ sd_error_enum sd_power_off(void)
 }
 
 /*!
-    \brief      configure the bus mode
-    \param[in]  busmode: the bus mode
-      \arg        SDIO_BUSMODE_1BIT: 1-bit SDIO card bus mode
-      \arg        SDIO_BUSMODE_4BIT: 4-bit SDIO card bus mode
-      \arg        SDIO_BUSMODE_8BIT: 8-bit SDIO card bus mode (MMC only)
-    \param[out] none
-    \retval     sd_error_enum
+    \brief 配置总线模式
+    \param[in] busmode：总线模式
+      \arg SDIO_BUSMODE_1BIT：1 位 SDIO 卡总线模式
+      \arg SDIO_BUSMODE_4BIT：4 位 SDIO 卡总线模式
+      \arg SDIO_BUSMODE_8BIT：8 位 SDIO 卡总线模式（仅限 MMC）
+    \param[out] 无
+    \retval sd_error_enum
 */
 sd_error_enum sd_bus_mode_config(uint32_t busmode)
 {
@@ -409,12 +409,12 @@ sd_error_enum sd_bus_mode_config(uint32_t busmode)
 }
 
 /*!
-    \brief      configure the mode of transmission
-    \param[in]  txmode: transfer mode
-      \arg        SD_DMA_MODE: DMA mode
-      \arg        SD_POLLING_MODE: polling mode
-    \param[out] none
-    \retval     sd_error_enum
+    \brief 配置传输方式
+    \param[in] txmode：传输模式
+      \arg SD_DMA_MODE：DMA 模式
+      \arg SD_POLLING_MODE：轮询模式
+    \param[out] 无
+    \retval sd_error_enum
 */
 sd_error_enum sd_transfer_mode_config(uint32_t txmode)
 {
@@ -429,11 +429,11 @@ sd_error_enum sd_transfer_mode_config(uint32_t txmode)
 }
 
 /*!
-    \brief      read a block data into a buffer from the specified address of a card
-    \param[out] preadbuffer: a pointer that store a block read data
-    \param[in]  readaddr: the read data address
-    \param[in]  blocksize: the data block size
-    \retval     sd_error_enum
+    \brief 将块数据从卡的指定地址读入缓冲区
+    \param[out] preadbuffer：存储块读取数据的指针
+    \param[in] readaddr：读取数据地址
+    \param[in] blocksize：数据块大小
+    \retval sd_error_enum
 */
 sd_error_enum sd_block_read(uint32_t *preadbuffer, uint32_t readaddr, uint16_t blocksize)
 {
@@ -560,12 +560,12 @@ sd_error_enum sd_block_read(uint32_t *preadbuffer, uint32_t readaddr, uint16_t b
 }
 
 /*!
-    \brief      read multiple blocks data into a buffer from the specified address of a card
-    \param[out] preadbuffer: a pointer that store multiple blocks read data
-    \param[in]  readaddr: the read data address
-    \param[in]  blocksize: the data block size
-    \param[in]  blocksnumber: number of blocks that will be read
-    \retval     sd_error_enum
+    \brief 将多个块数据从卡的指定地址读取到缓冲区中
+    \param[out] preadbuffer：存储多个块读取数据的指针
+    \param[in] readaddr：读取数据地址
+    \param[in] blocksize：数据块大小
+    \param[in] blocksnumber：将读取的块数
+    \retval sd_error_enum
 */
 sd_error_enum sd_multiblocks_read(uint32_t *preadbuffer, uint32_t readaddr, uint16_t blocksize, uint32_t blocksnumber)
 {
@@ -720,12 +720,12 @@ sd_error_enum sd_multiblocks_read(uint32_t *preadbuffer, uint32_t readaddr, uint
 }
 
 /*!
-    \brief      write a block data to the specified address of a card
-    \param[in]  pwritebuffer: a pointer that store a block data to be transferred
-    \param[in]  writeaddr: the read data address
-    \param[in]  blocksize: the data block size
-    \param[out] none
-    \retval     sd_error_enum
+    \brief 将块数据写入卡的指定地址
+    \param[in] pwritebuffer：存储要传输的块数据的指针
+    \param[in] writeaddr：读取数据地址
+    \param[in] blocksize：数据块大小
+    \param[out] 无
+    \retval sd_error_enum
 */
 sd_error_enum sd_block_write(uint32_t *pwritebuffer, uint32_t writeaddr, uint16_t blocksize)
 {
@@ -906,13 +906,13 @@ sd_error_enum sd_block_write(uint32_t *pwritebuffer, uint32_t writeaddr, uint16_
 }
 
 /*!
-    \brief      write multiple blocks data to the specified address of a card
-    \param[in]  pwritebuffer: a pointer that store multiple blocks data to be transferred
-    \param[in]  writeaddr: the read data address
-    \param[in]  blocksize: the data block size
-    \param[in]  blocksnumber: number of blocks that will be written
-    \param[out] none
-    \retval     sd_error_enum
+    \brief 将多个块数据写入卡的指定地址
+    \param[in] pwritebuffer：存储多个要传输的块数据的指针
+    \param[in] writeaddr：读取数据地址
+    \param[in] blocksize：数据块大小
+    \param[in] blocksnumber：将写入的块数
+    \param[out] 无
+    \retval sd_error_enum
 */
 sd_error_enum sd_multiblocks_write(uint32_t *pwritebuffer, uint32_t writeaddr, uint16_t blocksize, uint32_t blocksnumber)
 {
@@ -1116,11 +1116,11 @@ sd_error_enum sd_multiblocks_write(uint32_t *pwritebuffer, uint32_t writeaddr, u
 }
 
 /*!
-    \brief      erase a continuous area of a card
-    \param[in]  startaddr: the start address
-    \param[in]  endaddr: the end address
-    \param[out] none
-    \retval     sd_error_enum
+    \brief 擦除卡片的连续区域
+    \param[in] startaddr：起始地址
+    \param[in] endaddr：结束地址
+    \param[out] 无
+    \retval sd_error_enum
 */
 sd_error_enum sd_erase(uint32_t startaddr, uint32_t endaddr)
 {
@@ -1202,10 +1202,10 @@ sd_error_enum sd_erase(uint32_t startaddr, uint32_t endaddr)
 }
 
 /*!
-    \brief      process all the interrupts which the corresponding flags are set
-    \param[in]  none
-    \param[out] none
-    \retval     sd_error_enum
+    \brief 处理设置了相应标志的所有中断
+    \param[in] 无
+    \param[out] 无
+    \retval sd_error_enum
 */
 sd_error_enum sd_interrupts_process(void)
 {
@@ -1279,10 +1279,10 @@ sd_error_enum sd_interrupts_process(void)
 }
 
 /*!
-    \brief      select or deselect a card
-    \param[in]  cardrca: the RCA of a card
-    \param[out] none
-    \retval     sd_error_enum
+    \brief 选择或取消选择卡片
+    \param[in] cardrca：卡的 RCA
+    \param[out] 无
+    \retval sd_error_enum
 */
 sd_error_enum sd_card_select_deselect(uint16_t cardrca)
 {
@@ -1297,10 +1297,10 @@ sd_error_enum sd_card_select_deselect(uint16_t cardrca)
 }
 
 /*!
-    \brief      get the card status whose response format R1 contains a 32-bit field
-    \param[in]  none
-    \param[out] pcardstatus: a pointer that store card status
-    \retval     sd_error_enum
+    \brief 获取其响应格式 R1 包含 32 位字段的卡状态
+    \param[in] 无
+    \param[out] pcardstatus：存储卡状态的指针
+    \retval sd_error_enum
 */
 sd_error_enum sd_cardstatus_get(uint32_t *pcardstatus)
 {
@@ -1419,10 +1419,10 @@ sd_error_enum sd_sdstatus_get(uint32_t *psdstatus)
 }
 
 /*!
-    \brief      stop an ongoing data transfer
-    \param[in]  none
-    \param[out] none
-    \retval     sd_error_enum
+    \brief 停止正在进行的数据传输
+    \param[in] 无
+    \param[out] 无
+    \retval sd_error_enum
 */
 sd_error_enum sd_transfer_stop(void)
 {
@@ -1435,14 +1435,13 @@ sd_error_enum sd_transfer_stop(void)
     status = r1_error_check(SD_CMD_STOP_TRANSMISSION);
     return status;
 }
-
 /*!
-    \brief      lock or unlock a card
-    \param[in]  lockstate: the lock state
-      \arg        SD_LOCK: lock the SD card
-      \arg        SD_UNLOCK: unlock the SD card
-    \param[out] none
-    \retval     sd_error_enum
+    \简短锁定或解锁卡
+    \param[in] lockstate：锁定状态
+      \arg SD_LOCK：锁定 SD 卡
+      \arg SD_UNLOCK：解锁 SD 卡
+    \param[out] 无
+    \retval sd_error_enum
 */
 sd_error_enum sd_lock_unlock(uint8_t lockstate)
 {
@@ -1564,10 +1563,10 @@ sd_error_enum sd_lock_unlock(uint8_t lockstate)
 }
 
 /*!
-    \brief      get the data transfer state
-    \param[in]  none
-    \param[out] none
-    \retval     sd_error_enum
+    \brief 获取数据传输状态
+    \param[in] 无
+    \param[out] 无
+    \retval sd_error_enum
 */
 sd_transfer_state_enum sd_transfer_state_get(void)
 {
@@ -1579,10 +1578,10 @@ sd_transfer_state_enum sd_transfer_state_get(void)
 }
 
 /*!
-    \brief      get SD card capacity
-    \param[in]  none
-    \param[out] none
-    \retval     capacity of the card(KB)
+    \brief 获取 SD 卡容量
+    \param[in] 无
+    \param[out] 无
+    \卡的恢复容量（KB）
 */
 uint32_t sd_card_capacity_get(void)
 {
@@ -1629,10 +1628,10 @@ uint32_t sd_card_capacity_get(void)
 }
 
 /*!
-    \brief      get the detailed information of the SD card based on received CID and CSD
-    \param[in]  none
-    \param[out] pcardinfo: a pointer that store the detailed card information
-    \retval     sd_error_enum
+    \brief 根据收到的 CID 和 CSD 获取 SD 卡的详细信息
+    \param[in] 无
+    \param[out] pcardinfo：存储详细卡信息的指针
+    \retval sd_error_enum
 */
 sd_error_enum sd_card_information_get(sd_card_info_struct *pcardinfo)
 {
@@ -1827,10 +1826,10 @@ sd_error_enum sd_card_information_get(sd_card_info_struct *pcardinfo)
 }
 
 /*!
-    \brief      check if the command sent error occurs
-    \param[in]  none
-    \param[out] none
-    \retval     sd_error_enum
+    \brief 检查是否发生命令发送错误
+    \param[in] 无
+    \param[out] 无
+    \retval sd_error_enum
 */
 static sd_error_enum cmdsent_error_check(void)
 {
@@ -1851,10 +1850,10 @@ static sd_error_enum cmdsent_error_check(void)
 }
 
 /*!
-    \brief      check if error type for R1 response
-    \param[in]  resp: content of response
-    \param[out] none
-    \retval     sd_error_enum
+    \brief 检查 R1 响应的错误类型
+    \param[in] resp： 响应内容
+    \param[out] 无
+    \retval sd_error_enum
 */
 static sd_error_enum r1_error_type_check(uint32_t resp)
 {
@@ -1899,10 +1898,10 @@ static sd_error_enum r1_error_type_check(uint32_t resp)
 }
 
 /*!
-    \brief      check if error occurs for R1 response
-    \param[in]  cmdindex: the index of command
-    \param[out] none
-    \retval     sd_error_enum
+    \brief 检查 R1 响应是否发生错误
+    \param[in] cmdindex：命令的索引
+    \param[out] 无
+    \retval sd_error_enum
 */
 static sd_error_enum r1_error_check(uint8_t cmdindex)
 {
@@ -1946,10 +1945,10 @@ static sd_error_enum r1_error_check(uint8_t cmdindex)
 }
 
 /*!
-    \brief      check if error occurs for R2 response
-    \param[in]  none
-    \param[out] none
-    \retval     sd_error_enum
+    \brief 检查 R2 响应是否发生错误
+    \param[in] 无
+    \param[out] 无
+    \retval sd_error_enum
 */
 static sd_error_enum r2_error_check(void)
 {
@@ -2088,20 +2087,20 @@ static sd_error_enum r7_error_check(void)
 }
 
 /*!
-    \brief      get the state which the card is in
-    \param[in]  none
-    \param[out] pcardstate: a pointer that store the card state
-      \arg        SD_CARDSTATE_IDLE: card is in idle state
-      \arg        SD_CARDSTATE_READY: card is in ready state
-      \arg        SD_CARDSTATE_IDENTIFICAT: card is in identificat state
-      \arg        SD_CARDSTATE_STANDBY: card is in standby state
-      \arg        SD_CARDSTATE_TRANSFER: card is in transfer state
-      \arg        SD_CARDSTATE_DATA: card is in data state
-      \arg        SD_CARDSTATE_RECEIVING: card is in receiving state
-      \arg        SD_CARDSTATE_PROGRAMMING: card is in programming state
-      \arg        SD_CARDSTATE_DISCONNECT: card is in disconnect state
-      \arg        SD_CARDSTATE_LOCKED: card is in locked state
-    \retval     sd_error_enum
+    \brief 获取卡所处的状态
+    \param[in] 无
+    \param[out] pcardstate：存储卡状态的指针
+      \arg SD_CARDSTATE_IDLE：卡处于空闲状态
+      \arg SD_CARDSTATE_READY：卡处于就绪状态
+      \arg SD_CARDSTATE_IDENTIFICAT：卡处于 identificat 状态
+      \arg SD_CARDSTATE_STANDBY：卡处于待机状态
+      \arg SD_CARDSTATE_TRANSFER：卡处于传输状态
+      \arg SD_CARDSTATE_DATA：卡处于数据状态
+      \arg SD_CARDSTATE_RECEIVING：卡处于接收状态
+      \arg SD_CARDSTATE_PROGRAMMING：卡处于编程状态
+      \arg SD_CARDSTATE_DISCONNECT：卡处于断开连接状态
+      \arg SD_CARDSTATE_LOCKED：卡处于锁定状态
+    \retval sd_error_enum
 */
 static sd_error_enum sd_card_state_get(uint8_t *pcardstate)
 {
@@ -2231,10 +2230,10 @@ static sd_error_enum sd_bus_width_config(uint32_t buswidth)
 }
 
 /*!
-    \brief      get the SCR of corresponding card
-    \param[in]  rca: RCA of a card
-    \param[out] pscr: a pointer that store the SCR content
-    \retval     sd_error_enum
+    \brief 获取对应卡的 SCR
+    \param[in] rca：卡的 RCA
+    \param[out] pscr：存储 SCR 内容的指针
+    \retval sd_error_enum
 */
 static sd_error_enum sd_scr_get(uint16_t rca, uint32_t *pscr)
 {
@@ -2313,25 +2312,25 @@ static sd_error_enum sd_scr_get(uint16_t rca, uint32_t *pscr)
 }
 
 /*!
-    \brief      get the data block size
-    \param[in]  bytesnumber: the number of bytes
-    \param[out] none
-    \retval     data block size
-      \arg        SDIO_DATABLOCKSIZE_1BYTE: block size = 1 byte
-      \arg        SDIO_DATABLOCKSIZE_2BYTES: block size = 2 bytes
-      \arg        SDIO_DATABLOCKSIZE_4BYTES: block size = 4 bytes
-      \arg        SDIO_DATABLOCKSIZE_8BYTES: block size = 8 bytes
-      \arg        SDIO_DATABLOCKSIZE_16BYTES: block size = 16 bytes
-      \arg        SDIO_DATABLOCKSIZE_32BYTES: block size = 32 bytes
-      \arg        SDIO_DATABLOCKSIZE_64BYTES: block size = 64 bytes
-      \arg        SDIO_DATABLOCKSIZE_128BYTES: block size = 128 bytes
-      \arg        SDIO_DATABLOCKSIZE_256BYTES: block size = 256 bytes
-      \arg        SDIO_DATABLOCKSIZE_512BYTES: block size = 512 bytes
-      \arg        SDIO_DATABLOCKSIZE_1024BYTES: block size = 1024 bytes
-      \arg        SDIO_DATABLOCKSIZE_2048BYTES: block size = 2048 bytes
-      \arg        SDIO_DATABLOCKSIZE_4096BYTES: block size = 4096 bytes
-      \arg        SDIO_DATABLOCKSIZE_8192BYTES: block size = 8192 bytes
-      \arg        SDIO_DATABLOCKSIZE_16384BYTES: block size = 16384 bytes
+    \brief 获取数据块大小
+    \param[in] bytesnumber：字节数
+    \param[out] 无
+    \retval 数据块大小
+      \arg SDIO_DATABLOCKSIZE_1BYTE：块大小 = 1 字节
+      \arg SDIO_DATABLOCKSIZE_2BYTES：块大小 = 2 字节
+      \arg SDIO_DATABLOCKSIZE_4BYTES：块大小 = 4 字节
+      \arg SDIO_DATABLOCKSIZE_8BYTES：块大小 = 8 字节
+      \arg SDIO_DATABLOCKSIZE_16BYTES：块大小 = 16 字节
+      \arg SDIO_DATABLOCKSIZE_32BYTES：块大小 = 32 字节
+      \arg SDIO_DATABLOCKSIZE_64BYTES：块大小 = 64 字节
+      \arg SDIO_DATABLOCKSIZE_128BYTES：块大小 = 128 字节
+      \arg SDIO_DATABLOCKSIZE_256BYTES：块大小 = 256 字节
+      \arg SDIO_DATABLOCKSIZE_512BYTES：块大小 = 512 字节
+      \arg SDIO_DATABLOCKSIZE_1024BYTES：块大小 = 1024 字节
+      \arg SDIO_DATABLOCKSIZE_2048BYTES：块大小 = 2048 字节
+      \arg SDIO_DATABLOCKSIZE_4096BYTES：块大小 = 4096 字节
+      \arg SDIO_DATABLOCKSIZE_8192BYTES：块大小 = 8192 字节
+      \arg SDIO_DATABLOCKSIZE_16384BYTES：块大小 = 16384 字节
 */
 static uint32_t sd_datablocksize_get(uint16_t bytesnumber)
 {
@@ -2345,10 +2344,10 @@ static uint32_t sd_datablocksize_get(uint16_t bytesnumber)
 }
 
 /*!
-    \brief      configure the GPIO of SDIO interface
-    \param[in]  none
-    \param[out] none
-    \retval     none
+    \brief 配置 SDIO 接口的 GPIO
+    \param[in] 无
+    \param[out] 无
+    \retval 无
 */
 static void gpio_config(void)
 {
@@ -2368,10 +2367,10 @@ static void gpio_config(void)
 }
 
 /*!
-    \brief      configure the RCU of SDIO and DMA
-    \param[in]  none
-    \param[out] none
-    \retval     none
+    \brief 配置 SDIO 和 DMA 的 RCU
+    \param[in] 无
+    \param[out] 无
+    \retval 无
 */
 static void rcu_config(void)
 {
@@ -2383,11 +2382,11 @@ static void rcu_config(void)
 }
 
 /*!
-    \brief      configure the DMA1 channel 3 for transferring data
-    \param[in]  srcbuf: a pointer point to a buffer which will be transferred
-    \param[in]  bufsize: the size of buffer(not used in flow controller is peripheral)
-    \param[out] none
-    \retval     none
+    \brief 配置 DMA1 通道 3 以传输数据
+    \param[in] srcbuf：指向将要传输的缓冲区的指针
+    \param[in] bufsize： 缓冲区的大小（流量控制器中未使用为外设）
+    \param[out] 无
+    \retval 无
 */
 static void dma_transfer_config(uint32_t *srcbuf, uint32_t bufsize)
 {
@@ -2423,11 +2422,11 @@ static void dma_transfer_config(uint32_t *srcbuf, uint32_t bufsize)
 }
 
 /*!
-    \brief      configure the DMA1 channel 3 for receiving data
-    \param[in]  dstbuf: a pointer point to a buffer which will receive data
-    \param[in]  bufsize: the size of buffer(not used in flow controller is peripheral)
-    \param[out] none
-    \retval     none
+    \brief 配置 DMA1 通道 3 以接收数据
+    \param[in] dstbuf：指向将接收数据的缓冲区的指针
+    \param[in] bufsize： 缓冲区的大小（流量控制器中未使用为外设）
+    \param[out] 无
+    \retval 无
 */
 static void dma_receive_config(uint32_t *dstbuf, uint32_t bufsize)
 {
