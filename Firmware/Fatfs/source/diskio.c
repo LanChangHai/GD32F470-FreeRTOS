@@ -12,8 +12,7 @@
 
 /* Definitions of physical drive number for each drive */
 #define DEV_SDCARD		0	/* Example: Map Ramdisk to physical drive 0 */
-uint8_t SDCARD_STATUS = 0;
-
+extern sd_card_info_struct sd_cardinfo;
 /*-----------------------------------------------------------------------*/
 /* Get Drive Status                                                      */
 /*-----------------------------------------------------------------------*/
@@ -26,10 +25,7 @@ DSTATUS disk_status (
 	switch (pdrv) {
 	    case DEV_SDCARD :
         {
-            if (SDCARD_STATUS)
-            {
-                stat &= ~STA_NOINIT;
-            }
+            stat = RES_OK;
             break;
         }
 	}
@@ -53,10 +49,10 @@ DSTATUS disk_initialize (
 	    case DEV_SDCARD :
         {
             result = sd_io_init();
+            //card_info_get();
             if(SD_OK == result)
             {
                 status &= ~STA_NOINIT;
-                SDCARD_STATUS = 1;
             }
             break;
         }
@@ -77,16 +73,39 @@ DRESULT disk_read (
 	UINT count		/* Number of sectors to read */
 )
 {
-	DRESULT res;
-	int result;
+    DRESULT result = RES_PARERR;
     sd_error_enum sd_error;
 	switch (pdrv) {
         case DEV_SDCARD :{
-            sd_error = sd_block_read(buff, 100 * 512, 512);
+            if ((DWORD)buff&3) {
+                result = RES_OK;
+                DWORD scratch[512 / 4];
+                while (count--) {
+                    sd_error = sd_block_read(scratch, sector*BLOCKSIZE, BLOCKSIZE);
+                    if (sd_error != SD_OK) {
+                        result = RES_ERROR;
+                        break;
+                    }
+                    memcpy(buff, scratch, 512);
+                    sector++;
+                    buff += 512;
+                }
+            }else
+            {
+                sd_error = sd_multiblocks_read((uint32_t *)buff, sector*BLOCKSIZE, BLOCKSIZE,(uint32_t)count);
+                if(sd_error != SD_OK)
+                {
+                    result = RES_ERROR;
+                }
+                else
+                {
+                    result = RES_OK;
+                }
+            }
+            break;
         }
 	}
-
-	return RES_PARERR;
+	return result;
 }
 
 
@@ -104,39 +123,40 @@ DRESULT disk_write (
 	UINT count			/* Number of sectors to write */
 )
 {
-	DRESULT res;
-	int result;
-
+    DRESULT result = RES_PARERR;
+    sd_error_enum sd_error;
 	switch (pdrv) {
-	case DEV_RAM :
-		// translate the arguments here
-
-		result = RAM_disk_write(buff, sector, count);
-
-		// translate the reslut code here
-
-		return res;
-
-	case DEV_MMC :
-		// translate the arguments here
-
-		result = MMC_disk_write(buff, sector, count);
-
-		// translate the reslut code here
-
-		return res;
-
-	case DEV_USB :
-		// translate the arguments here
-
-		result = USB_disk_write(buff, sector, count);
-
-		// translate the reslut code here
-
-		return res;
+        case DEV_SDCARD:
+        {
+            if ((DWORD)buff&3) {
+                result = RES_OK;
+                DWORD scratch[512 / 4];
+                while (count--) {
+                    memcpy(scratch,buff,512);
+                    sd_error = sd_block_write(scratch,sector*BLOCKSIZE,BLOCKSIZE);
+                    if (sd_error != SD_OK) {
+                        result = RES_ERROR;
+                        break;
+                    }
+                    sector++;
+                    buff += 512;
+                }
+            }else
+            {
+                sd_error = sd_multiblocks_write((uint32_t *)buff, sector*BLOCKSIZE, BLOCKSIZE,(uint32_t)count);
+                if(sd_error != SD_OK)
+                {
+                    result = RES_ERROR;
+                }
+                else
+                {
+                    result = RES_OK;
+                }
+            }
+            break;
+        }
 	}
-
-	return RES_PARERR;
+	return result;
 }
 
 #endif
@@ -152,29 +172,28 @@ DRESULT disk_ioctl (
 	void *buff		/* Buffer to send/receive control data */
 )
 {
-	DRESULT res;
-	int result;
-
-	switch (pdrv) {
-	case DEV_RAM :
-
-		// Process of the command for the RAM drive
-
-		return res;
-
-	case DEV_MMC :
-
-		// Process of the command for the MMC/SD card
-
-		return res;
-
-	case DEV_USB :
-
-		// Process of the command the USB drive
-
-		return res;
-	}
-
-	return RES_PARERR;
+    uint32_t capacity;
+    DRESULT result = RES_PARERR;
+    switch (pdrv) {
+        case DEV_SDCARD: {
+            switch (cmd) {
+                case GET_SECTOR_SIZE:
+                    *(WORD *)buff = BLOCKSIZE;
+                    break;
+                case GET_BLOCK_SIZE:
+                    *(DWORD *)buff = sd_cardinfo.card_blocksize;
+                    break;
+                case GET_SECTOR_COUNT:
+                    capacity = sd_card_capacity_get();
+                    *(DWORD *)buff = capacity * 1024 / sd_cardinfo.card_blocksize;
+                    break;
+                case CTRL_SYNC:
+                    break;
+            }
+            result = RES_OK;
+            break;
+        }
+        default:break;
+    }
+    return result;
 }
-

@@ -10,6 +10,9 @@ extern "C" {
 #endif
 
 #include "drive.h"
+#include <string.h>
+
+#define BLOCKSIZE 512
 
 /* Status of Disk Functions */
 typedef BYTE	DSTATUS;

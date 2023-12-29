@@ -569,6 +569,10 @@ sd_error_enum sd_block_read(uint32_t *preadbuffer, uint32_t readaddr, uint16_t b
 */
 sd_error_enum sd_multiblocks_read(uint32_t *preadbuffer, uint32_t readaddr, uint16_t blocksize, uint32_t blocksnumber)
 {
+    if(1 == blocksnumber)
+    {
+      return sd_block_read(preadbuffer, readaddr, blocksize);
+    }
     /* initialize the variables */
     sd_error_enum status = SD_OK;
     uint32_t count = 0, align = 0, datablksize = SDIO_DATABLOCKSIZE_1BYTE, *ptempbuff = preadbuffer;
@@ -916,6 +920,10 @@ sd_error_enum sd_block_write(uint32_t *pwritebuffer, uint32_t writeaddr, uint16_
 */
 sd_error_enum sd_multiblocks_write(uint32_t *pwritebuffer, uint32_t writeaddr, uint16_t blocksize, uint32_t blocksnumber)
 {
+    if(1 == blocksnumber)
+    {
+        return sd_block_read(pwritebuffer, writeaddr, blocksize);
+    }
     /* initialize the variables */
     sd_error_enum status = SD_OK;
     uint8_t cardstate = 0;
