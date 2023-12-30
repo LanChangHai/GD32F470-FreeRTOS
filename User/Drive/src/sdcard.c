@@ -922,7 +922,7 @@ sd_error_enum sd_multiblocks_write(uint32_t *pwritebuffer, uint32_t writeaddr, u
 {
     if(1 == blocksnumber)
     {
-        return sd_block_read(pwritebuffer, writeaddr, blocksize);
+        return sd_block_write(pwritebuffer, writeaddr, blocksize);
     }
     /* initialize the variables */
     sd_error_enum status = SD_OK;

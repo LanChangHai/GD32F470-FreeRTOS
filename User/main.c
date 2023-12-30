@@ -4,16 +4,11 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "ff.h"
+#include "drive.h"
 
 TaskHandle_t StartTask_Handler;
 
-FATFS fs;                         /* FatFs文件系统对象 */
-FIL fnew;                         /* 文件对象 */
-FRESULT res_sd;                /* 文件操作结果 */
-UINT fnum;                        /* 文件成功读写数量 */
-BYTE ReadBuffer[1024]= {0};       /* 读缓冲区 */
-BYTE WriteBuffer[] =              /* 写缓冲区*/
-    "欢迎使用野火STM32开发板 今天是个好日子，新建文件系统测试文件\r\n";
+extern sd_card_info_struct sd_cardinfo;                            /* information of SD card */
 
 void LED_Init(void);
 void CrateTask(void *pvParameters);
@@ -44,8 +39,8 @@ int main(void)
     {
         ;
     }
-
-    while (1);
+    while (1) {
+    }
 }
 
 void LED_Init(void)
@@ -76,8 +71,17 @@ void CrateTask(void *pvParameters){
 
 void task_led2(void *pvParameters)
 {
+    FATFS fs;                         /* FatFs文件系统对象 */
+    FIL fnew;                         /* 文件对象 */
+    FRESULT res_sd;                /* 文件操作结果 */
+    UINT fnum;                        /* 文件成功读写数量 */
+    BYTE ReadBuffer[1024]= {0};       /* 读缓冲区 */
+    BYTE WriteBuffer[] =              /* 写缓冲区*/
+        "12345\r\n";
+
     printf("\r\n****** 这是一个SD卡 文件系统实验 ******\r\n");
 
+    //在外部SPI Flash挂载文件系统，文件系统挂载时会对SPI设备初始化
     res_sd = f_mount(&fs,"0:",1);
 
     /*----------------------- 格式化测试 ---------------------------*/
@@ -85,15 +89,7 @@ void task_led2(void *pvParameters)
     if (res_sd == FR_NO_FILESYSTEM) {
         printf("》SD卡还没有文件系统，即将进行格式化...\r\n");
         /* 格式化 */
-        MKFS_PARM opt={
-            .fmt = FM_EXFAT,
-            .n_fat = 1,
-            .align = 512,
-            .au_size = 0,
-            .n_root = 512
-        };
-        uint8_t *workbuff = (uint8_t *)pvPortMalloc(1024*sizeof(uint8_t));
-        res_sd=f_mkfs("0:",&opt,workbuff,1024);
+        res_sd=f_mkfs("0:",0,0,0);
 
         if (res_sd == FR_OK) {
             printf("》SD卡已成功格式化文件系统。\r\n");
@@ -112,11 +108,11 @@ void task_led2(void *pvParameters)
     } else {
         printf("》文件系统挂载成功，可以进行读写测试\r\n");
     }
-    char filename[] = "0:GD32_SD_FATFS.txt";
+
     /*--------------------- 文件系统测试：写测试 -----------------------*/
     /* 打开文件，如果文件不存在则创建它 */
     printf("\r\n****** 即将进行文件写入测试... ******\r\n");
-    res_sd=f_open(&fnew,filename,FA_CREATE_ALWAYS|FA_WRITE);
+    res_sd=f_open(&fnew,"0:FatFs读写测试文件.txt",FA_CREATE_ALWAYS|FA_WRITE);
     if ( res_sd == FR_OK ) {
         printf("》打开/创建FatFs读写测试文件.txt文件成功，向文件写入数据。\r\n");
         /* 将指定存储区内容写入到文件内 */
